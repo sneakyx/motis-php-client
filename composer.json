@@ -1,0 +1,45 @@
+{
+    "name": "sneakyx/motis-php-client",
+    "description": "PHP client for the MOTIS API (e.g. Transitous): multimodal routing, geocoding, stoptimes and trip information. Type-safe models generated from the official OpenAPI specification, PSR-18 HTTP transport.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["motis", "transitous", "public-transport", "routing", "geocoding", "gtfs", "openapi", "psr-18"],
+    "homepage": "https://github.com/sneakyx/motis-php-client",
+    "authors": [
+        {
+            "name": "André Scholz",
+            "homepage": "https://github.com/sneakyx"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/sneakyx/motis-php-client/issues",
+        "source": "https://github.com/sneakyx/motis-php-client"
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^7.4",
+        "guzzlehttp/psr7": "^2.0",
+        "psr/http-client": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5 || ^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sneakyx\\MotisPhpClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sneakyx\\MotisPhpClient\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

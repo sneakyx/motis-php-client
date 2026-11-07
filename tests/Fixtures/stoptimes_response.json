@@ -1,0 +1,41 @@
+{
+    "stopTimes": [
+        {
+            "place": {
+                "name": "Frankfurt (Main) Hauptwache",
+                "stopId": "de:06412:1011",
+                "lat": 50.11224,
+                "lon": 8.68214,
+                "departure": "2026-11-09T10:01:00+01:00",
+                "scheduledDeparture": "2026-11-09T10:01:00+01:00"
+            },
+            "mode": "SUBWAY",
+            "realTime": false,
+            "headsign": "Frankfurt (Main) Preungesheim",
+            "tripFrom": "Frankfurt (Main) Hauptwache",
+            "tripTo": "Frankfurt (Main) Preungesheim",
+            "agencyId": "0",
+            "agencyName": "Stadtwerke Verkehrsgesellschaft Frankfurt",
+            "agencyUrl": "https://www.traffiq.de",
+            "tripId": "1|1234|0|0|0",
+            "routeId": "1|4|0",
+            "directionId": 0,
+            "routeShortName": "U5",
+            "routeLongName": "Frankfurt (Main) Hauptwache - Frankfurt (Main) Preungesheim",
+            "tripShortName": "",
+            "displayName": "U5 Frankfurt (Main) Preungesheim",
+            "cancelled": false,
+            "tripCancelled": false,
+            "source": "GTFS"
+        }
+    ],
+    "place": {
+        "name": "Frankfurt (Main) Hauptwache",
+        "stopId": "de:06412:1011",
+        "lat": 50.11224,
+        "lon": 8.68214,
+        "tz": "Europe/Berlin"
+    },
+    "previousPageCursor": null,
+    "nextPageCursor": null
+}
