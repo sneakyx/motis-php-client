@@ -1,0 +1,64 @@
+{
+    "requestParameters": {
+        "fromPlace": "50.1109,8.6821",
+        "toPlace": "50.0989,8.6621"
+    },
+    "debugOutput": {
+        "n_queries": 1
+    },
+    "from": {
+        "name": "Frankfurt (Main) Hauptbahnhof",
+        "stopId": "de:06412:1000",
+        "lat": 50.1109,
+        "lon": 8.6821,
+        "tz": "Europe/Berlin",
+        "departure": "2026-11-09T10:00:00+01:00"
+    },
+    "to": {
+        "name": "Frankfurt (Main) Hauptwache",
+        "stopId": "de:06412:1011",
+        "lat": 50.0989,
+        "lon": 8.6621,
+        "tz": "Europe/Berlin",
+        "arrival": "2026-11-09T10:08:00+01:00"
+    },
+    "direct": [],
+    "itineraries": [
+        {
+            "duration": 480,
+            "startTime": "2026-11-09T10:00:00+01:00",
+            "endTime": "2026-11-09T10:08:00+01:00",
+            "transfers": 0,
+            "id": "5cd2a86f",
+            "legs": [
+                {
+                    "mode": "WALK",
+                    "startTime": "2026-11-09T10:00:00+01:00",
+                    "endTime": "2026-11-09T10:08:00+01:00",
+                    "scheduledStartTime": "2026-11-09T10:00:00+01:00",
+                    "scheduledEndTime": "2026-11-09T10:08:00+01:00",
+                    "realTime": false,
+                    "scheduled": true,
+                    "duration": 480,
+                    "from": {
+                        "name": "Frankfurt (Main) Hauptbahnhof",
+                        "stopId": "de:06412:1000",
+                        "lat": 50.1109,
+                        "lon": 8.6821
+                    },
+                    "to": {
+                        "name": "Frankfurt (Main) Hauptwache",
+                        "stopId": "de:06412:1011",
+                        "lat": 50.0989,
+                        "lon": 8.6621
+                    },
+                    "legGeometry": {
+                        "points": "_p~iF~ps|U_ulLnnqC"
+                    }
+                }
+            ]
+        }
+    ],
+    "previousPageCursor": null,
+    "nextPageCursor": null
+}

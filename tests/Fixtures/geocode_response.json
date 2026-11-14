@@ -1,0 +1,27 @@
+[
+    {
+        "type": "STOP",
+        "name": "Frankfurt (Main) Hauptwache",
+        "id": "de:06412:1011",
+        "lat": 50.11224,
+        "lon": 8.68214,
+        "tokens": ["frankfurt", "hauptwache"],
+        "areas": ["Frankfurt am Main", "Hessen"],
+        "score": 0.98,
+        "tz": "Europe/Berlin"
+    },
+    {
+        "type": "ADDRESS",
+        "name": "Hauptwache 5",
+        "id": "way123456",
+        "lat": 50.11234,
+        "lon": 8.68194,
+        "tokens": ["hauptwache"],
+        "areas": ["Frankfurt am Main"],
+        "score": 0.74,
+        "street": "Zeil",
+        "houseNumber": "5",
+        "country": "DE",
+        "zip": "60313"
+    }
+]

@@ -1,0 +1,10 @@
+{
+    "place": {
+        "name": "Frankfurt (Main) Hauptwache",
+        "stopId": "de:06412:1011",
+        "lat": 50.11224,
+        "lon": 8.68214,
+        "tz": "Europe/Berlin"
+    },
+    "routes": []
+}
