@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
+      - name: Prepare build directory
+        run: mkdir -p build
+
       - name: Cache MOTIS server and Aachen dataset
         id: cache-motis
         uses: actions/cache@v4
