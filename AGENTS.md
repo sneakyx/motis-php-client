@@ -36,7 +36,7 @@ php -d xdebug.mode=coverage vendor/bin/phpunit --coverage-text   # coverage via 
 
 ## Test conventions
 
-- PHPUnit, `tests/Unit`; no network access in tests.
+- PHPUnit; `tests/Unit` must stay offline, `tests/Integration` runs against a real MOTIS server and is skipped unless `MOTIS_BASE_URL` is set (`composer test:integration`).
 - PSR-18 mock: `tests/Support/MockHttpClient` (replays `Response` objects or
   `ClientExceptionInterface` stubs, records requests).
 - JSON fixtures live in `tests/Fixtures` and mirror real MOTIS response payloads.

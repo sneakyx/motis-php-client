@@ -1,0 +1,80 @@
+name: Integration tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  MOTIS_VERSION: v2.11.4
+  TEST_DATA_BRANCH: aachen
+  CACHE_KEY: motis-v2.11.4-testdata-aachen-v1
+
+jobs:
+  integration:
+    name: Integration tests (MOTIS v2.11.4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MOTIS_BASE_URL: http://localhost:8080
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Cache MOTIS server and Aachen dataset
+        id: cache-motis
+        uses: actions/cache@v4
+        with:
+          path: build
+          key: ${{ env.CACHE_KEY }}
+
+      - name: Download MOTIS and Aachen dataset
+        if: steps.cache-motis.outputs.cache-hit != 'true'
+        working-directory: build
+        run: |
+          curl -fsSL -o motis.tar.bz2 "https://github.com/motis-project/motis/releases/download/${MOTIS_VERSION}/motis-linux-amd64.tar.bz2"
+          tar -xjf motis.tar.bz2
+          curl -fsSL -O "https://github.com/motis-project/test-data/raw/${TEST_DATA_BRANCH}/aachen.osm.pbf"
+          curl -fsSL -O "https://github.com/motis-project/test-data/raw/${TEST_DATA_BRANCH}/AVV_GTFS_Masten_mit_SPNV.zip"
+
+      - name: Import dataset
+        if: steps.cache-motis.outputs.cache-hit != 'true'
+        working-directory: build
+        run: |
+          ./motis config aachen.osm.pbf AVV_GTFS_Masten_mit_SPNV.zip
+          sed -i '/^tiles:/,/^timetable:/{/^timetable:/!d}' config.yml
+          ./motis import
+
+      - name: Start MOTIS server
+        working-directory: build
+        run: |
+          nohup ./motis server > server.log 2>&1 &
+          for i in $(seq 1 60); do
+            if curl -fsS "${MOTIS_BASE_URL}/api/v1/health" > /dev/null 2>&1; then
+              echo "MOTIS is up"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "MOTIS did not come up"
+          cat server.log
+          exit 1
+
+      - name: Run integration tests
+        run: vendor/bin/phpunit --testsuite integration --no-coverage
+
+      - name: Upload MOTIS server log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: motis-server-log
+          path: build/server.log
