@@ -136,6 +136,20 @@ vendor/bin/phpunit                          # plain test run
 vendor/bin/phpunit --coverage-text          # with coverage (requires pcov or xdebug)
 `
 
+### Integration tests
+
+The integration suite in `tests/Integration` runs against a real MOTIS
+server and is skipped by default. Start a MOTIS server with imported test
+data (see the quick start in the [motis README](https://github.com/motis-project/motis))
+and point the suite at it via `MOTIS_BASE_URL`:
+
+    MOTIS_BASE_URL=http://localhost:8080 composer test:integration
+
+CI runs this suite on every push against a pinned MOTIS release and the
+pinned Aachen dataset from [motis-project/test-data](https://github.com/motis-project/test-data).
+The tests use a fixed departure time that must be inside the validity
+period of the imported GTFS feed (see `IntegrationTestCase`).
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and pull requests in English, please.
