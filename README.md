@@ -123,6 +123,22 @@ and contacts on top of this package is planned.
 > fully tested yet - therefore the package stays at version 0.x.x (pre-1.0)
 > until that has been verified.
 
+## API version sync
+
+The vendored `openapi.yaml` and the generated code always correspond to a
+**tagged MOTIS release**, never to the `master` branch. A scheduled workflow
+(`.github/workflows/api-sync.yml`, weekly plus on demand) keeps them in sync:
+
+1. Resolves the latest tagged MOTIS release from the MOTIS repository
+2. Regenerates `src/Model`, `ObjectSerializer.php` and `ApiException.php`
+   from the `openapi.yaml` of exactly that tag via `scripts/regenerate.sh`
+3. Runs the unit tests
+4. Opens a pull request when the generated code changed, with the MOTIS
+   release in the title (for example "Sync API with MOTIS v2.11.4")
+
+Merging such a pull request keeps this package in sync with the MOTIS
+server. Tag a package release afterwards so the supported MOTIS version
+stays visible, for example `v0.2.0` of this package for MOTIS `v2.11.4`.
 ## Regenerating the models
 
 See [docs/REGENERATION.md](docs/REGENERATION.md). Generated code must never be
