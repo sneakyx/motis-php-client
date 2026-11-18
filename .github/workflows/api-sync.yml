@@ -1,0 +1,77 @@
+name: API sync
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+    inputs:
+      motis_tag:
+        description: 'MOTIS release tag to sync with (defaults to the latest release)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: api-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Regenerate the API from a tagged MOTIS release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve the MOTIS release tag
+        id: tag
+        run: |
+          if [ -n "${{ inputs.motis_tag }}" ]; then
+            TAG="${{ inputs.motis_tag }}"
+          else
+            TAG="$(curl -fsSL https://api.github.com/repos/motis-project/motis/releases/latest | jq -r .tag_name)"
+          fi
+          case "$TAG" in
+            v[0-9]*) ;;
+            *) echo "Refusing to sync against a non-release tag: $TAG" >&2; exit 1 ;;
+          esac
+          echo "Resolved MOTIS tag: $TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Regenerate the API code from the tagged spec
+        run: ./scripts/regenerate.sh "https://raw.githubusercontent.com/motis-project/motis/${{ steps.tag.outputs.tag }}/openapi.yaml"
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Run unit tests
+        run: vendor/bin/phpunit --testsuite default --no-coverage
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open a pull request with the regenerated API
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          BRANCH="api-sync/motis-${TAG}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "feat: sync API with MOTIS $TAG"
+          git push origin "$BRANCH" --force
+          gh pr create --base main --head "$BRANCH" --reviewer sneakyx \
+            --title "Sync API with MOTIS $TAG" \
+            --body "Regenerates the OpenAPI generated code (src/Model, ObjectSerializer.php, ApiException.php) and the vendored openapi.yaml from the MOTIS release $TAG. The unit test suite passed in the sync workflow before this pull request was created; CI does not run again here because the pull request was opened with the repository token. Closes nothing; merge and tag a package release (for example 0.2.0 for MOTIS $TAG) to keep versions in sync."
